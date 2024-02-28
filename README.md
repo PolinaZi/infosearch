@@ -2,3 +2,6 @@
 
 ## Task 2 
 pip install pymorphy2
+
+## Task 3
+pip install pymorphy2
