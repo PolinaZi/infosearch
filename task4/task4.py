@@ -64,40 +64,27 @@ class TFIDFCounter:
                 lemmas.append(line.split()[0])
         return lemmas
 
-    def calc_tf_idf_for_tokens(self, tokens, pages):
+    def calc_tf_idf(self, tokens, pages, folder_name):
         tfidf_vectorizer = TfidfVectorizer(vocabulary=tokens, stop_words=self.stop_words, lowercase=True)
         tfidf_matrix = tfidf_vectorizer.fit_transform(pages)
 
         for i, tfidf_row in enumerate(tfidf_matrix):
             tfidf_values = tfidf_row.toarray()[0]
-            output_filename = os.path.join(self.output_tokens_folder_name, f'tf_idf_{i + 1}.txt')
+            output_filename = os.path.join(folder_name, f'tf_idf_{i + 1}.txt')
             with open(output_filename, 'w', encoding='utf-8') as f:
                 for token, tfidf_value in zip(tokens, tfidf_values):
                     if tfidf_value != 0:
                         f.write(f"{token} {tfidf_vectorizer.idf_[tfidf_vectorizer.vocabulary_[token]]} {tfidf_value}\n")
-
-    def calc_tf_idf_for_lemmas(self, lemmas, lemmas_documents):
-        tfidf_vectorizer_lemmas = TfidfVectorizer(vocabulary=lemmas, stop_words=self.stop_words, lowercase=True)
-        tfidf_matrix_lemmas = tfidf_vectorizer_lemmas.fit_transform(lemmas_documents)
-
-        for i, tfidf_row in enumerate(tfidf_matrix_lemmas):
-            tfidf_values = tfidf_row.toarray()[0]
-            output_filename = os.path.join(self.output_lemmas_folder_name, f'tf_idf_{i + 1}.txt')
-            with open(output_filename, 'w', encoding='utf-8') as f:
-                for lemma, tfidf_value in zip(lemmas, tfidf_values):
-                    if tfidf_value != 0:
-                        f.write(
-                            f"{lemma} {tfidf_vectorizer_lemmas.idf_[tfidf_vectorizer_lemmas.vocabulary_[lemma]]} {tfidf_value}\n")
 
     def calculate_tf_idf(self):
         pages = self.get_pages()
         tokens = self.read_tokens()
         lemmas = self.read_lemmas()
 
-        self.calc_tf_idf_for_tokens(tokens, pages)
+        self.calc_tf_idf(tokens, pages, self.output_tokens_folder_name)
 
         lemmas_documents = self.get_lemmas_documents(pages)
-        self.calc_tf_idf_for_lemmas(lemmas, lemmas_documents)
+        self.calc_tf_idf(lemmas, lemmas_documents, self.output_lemmas_folder_name)
 
 
 if __name__ == '__main__':
