@@ -13,12 +13,12 @@ class Searcher:
 
     def __init__(self):
         self.path = os.getcwd() + '/'
-        self.tfidf_lemmas_folder_name = 'tfidf_lemmas'
-        self.tfidf_lemmas_path = self.path.replace("task5", "task4") + self.tfidf_lemmas_folder_name + '/'
+        self.tfidf_lemmas_folder = self.path.replace("task5", "task4") + 'tfidf_lemmas'
+        self.tfidf_lemmas_path = self.tfidf_lemmas_folder + '/'
         self.tfid_file_name_prefix = 'tf_idf_'
         self.lemma_tokens_file_name = self.path.replace("task5", "task2") + 'lemma_tokens.txt'
         self.inverted_index_file_name = self.path.replace("task5", "task3") + 'inverted_index.json'
-        self.pages_list = os.listdir(self.tfidf_lemmas_folder_name)
+        self.pages_list = os.listdir(self.tfidf_lemmas_folder)
         self.pages_lemma_tfidf = self.get_pages_lemma_tfidf()
         self.lemma_tokens = self.get_lemma_tokens()
         self.inverted_index = self.get_inverted_index()
@@ -30,7 +30,7 @@ class Searcher:
 
     def get_pages_lemma_tfidf(self) -> Dict[str, Dict[str, float]]:
         result = {}
-        for file_name in os.listdir(self.tfidf_lemmas_folder_name):
+        for file_name in self.pages_list:
             with open(self.tfidf_lemmas_path + file_name, encoding='utf-8') as tf_idf_file:
                 lines = tf_idf_file.readlines()
                 result[file_name] = {data[0]: float(data[2]) for data in
