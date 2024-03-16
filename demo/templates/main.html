@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>Главная страница поиска</title>
+    </head>
+    <body>
+        <h1 style="color: blue; border: 1px dashed;">Введите запрос:</h1>
+        <form action="/" method="POST">
+            <input type="text" name="input_value">
+            <br><br>
+            <input type="submit" value="Поиск">
+        </form>
+        {% if result %}
+            <h2>Результат поиска</h2>
+            <h3 style="color: blue;">Запрос: {{user_input}}</h3>
+            <ul>
+                 {% for key in result %}
+                    <li><a href={{ key }}>{{ key }}</a> <i>{{ result[key] }}</i></li>
+                 {% endfor %}
+            </ul>
+        {% endif %}
+        {% if not result %}
+            <h2>Ничего не найдено!</h2>
+        {% endif %}
+    </body>
+</html>
